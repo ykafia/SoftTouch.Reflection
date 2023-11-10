@@ -10,6 +10,12 @@ public partial struct Person
     public int Age { get; }
     public House PersonHouse { get; set; }
 
+    public Person(string name, int age)
+    {
+        Name = name;
+        Age = age;
+    }
+
 }
 
 [Reflectable]

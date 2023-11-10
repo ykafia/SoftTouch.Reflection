@@ -2,12 +2,20 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SoftTouch.Reflection.Core\SoftTouch.Reflection.Core.csproj" />
+    <ProjectReference Include="..\SoftTouch.Reflection.Generator\SoftTouch.Reflection.Generator.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <TargetFrameworks>netstandard2.1;net6.0;net7.0</TargetFrameworks>
+    <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- This project is meta package -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <PackageTags>reflection,generator,aot</PackageTags>
+    <Description>A simple reflection source generator.</Description>
   </PropertyGroup>
 
 </Project>

@@ -1,9 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <LangVersion>11</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>SoftTouch.Reflection.Core</RootNamespace>
+    <TargetFrameworks>netstandard2.1;net6.0;net7.0</TargetFrameworks>
+    <Description>Core APIs for SoftTouch.Reflection</Description>
   </PropertyGroup>
 
 </Project>

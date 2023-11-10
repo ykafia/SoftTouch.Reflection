@@ -1,4 +1,7 @@
-﻿namespace SoftTouch.Reflection.Core;
+﻿
+using System;
+
+namespace SoftTouch.Reflection.Core;
 
 public class ReflectableAttribute : Attribute
 {
