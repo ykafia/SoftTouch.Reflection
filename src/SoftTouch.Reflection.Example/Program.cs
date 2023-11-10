@@ -3,13 +3,19 @@ using SoftTouch.Reflection.Example;
 using SoftTouch.Reflection.Core;
 Console.WriteLine("Hello, World!");
 
-static void Reflect<T>(in T data)
-    where T : IReflectable
+static void Reflect<T>(ref T data)
+    where T : struct, IReflectable
 {
+    data.Set("Name", "Jane");
     Console.WriteLine(data.Get<string>("Name"));
 }
 
 
 var person = new Person("John", 5);
 
-Reflect(person);
+foreach(var p in Person.Setters)
+    Console.WriteLine(p);
+
+Reflect(ref person);
+
+Console.WriteLine(person.Name);

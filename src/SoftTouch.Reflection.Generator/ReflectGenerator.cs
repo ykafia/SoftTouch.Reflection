@@ -68,7 +68,7 @@ public class ReflectGenerator : ISourceGenerator
             code.WriteLine($"public static string[] Getters {{ get; }} = {{{string.Join(", ", propertiesWithGetters.Select(x => $"\"{x.Identifier}\""))}}};");
             code.WriteLine($"public static string[] Setters {{ get; }} = {{{string.Join(", ", propertiesWithGettersAndSetters.Select(x => $"\"{x.Identifier}\""))}}};");
 
-            code.WriteLine("public static bool HasProperty(string name) => Getters.Contains(name) || Setters.Contains(name);");
+            code.WriteLine("public bool HasProperty(string name) => Getters.Contains(name) || Setters.Contains(name);");
 
 
             code
@@ -139,7 +139,7 @@ public class ReflectGenerator : ISourceGenerator
             code.WriteLine($"public static string[] Getters {{ get; }} = {{{string.Join(", ", propertiesWithGetters.Select(x => $"\"{x.Identifier}\""))}}};");
             code.WriteLine($"public static string[] Setters {{ get; }} = {{{string.Join(", ", propertiesWithGettersAndSetters.Select(x => $"\"{x.Identifier}\""))}}};");
 
-            code.WriteLine("public static bool HasProperty(string name) => Getters.Contains(name) || Setters.Contains(name);");
+            code.WriteLine("public bool HasProperty(string name) => Getters.Contains(name) || Setters.Contains(name);");
 
 
             code
