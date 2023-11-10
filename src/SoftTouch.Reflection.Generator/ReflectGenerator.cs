@@ -32,19 +32,143 @@ public class ReflectGenerator : ISourceGenerator
                             .SelectMany(al => al.Attributes)
                             .Any(a => a.Name.GetText().ToString() == "Reflectable")));
 
-        var code1 = new CodeWriter();
 
-        code1.WriteLine("namespace hello1;");
-        context.AddSource("hello1.g.cs", code1.ToString());
-        code1.WriteLine("namespace hello1;");
-        context.AddSource("hello1.g.cs", code1.ToString());
-
-        foreach (var c in structsWithAttribute)
+        foreach (var s in structsWithAttribute)
         {
+            var nspace = s.SyntaxTree.GetRoot().DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>().First();
+            var usings = s.SyntaxTree.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
             var code = new CodeWriter();
 
-            code.WriteLine("namespace hello2;");
-            context.AddSource("hello2.g.cs",code.ToString());
+            var propertiesWithGetters = 
+                s.Members.OfType<PropertyDeclarationSyntax>()
+                .Where(x => x.AccessorList != null && x.AccessorList.GetText().ToString().Contains("get"))
+                .Where(x => x.GetText().ToString().Contains("public "))
+                .Select(x => (x.Type, x.Identifier));
+            var propertiesWithGettersAndSetters =
+                s.Members.OfType<PropertyDeclarationSyntax>()
+                .Where(x => x.AccessorList != null && x.AccessorList.GetText().ToString().Contains("get"))
+                .Where(x => x.AccessorList != null && x.AccessorList.GetText().ToString().Contains("set"))
+                .Where(x => x.GetText().ToString().Contains("public "))
+                .Select(x => (x.Type, x.Identifier));
+
+            foreach (var u in usings)
+                code.WriteLine($"using {u.Name};");
+
+            code.WriteLine("using SoftTouch.Reflection.Core;")
+                .WriteEmptyLines(2)
+                .WriteLine($"namespace {nspace.Name};")
+                .WriteEmptyLines(1);
+
+
+
+            code
+                .WriteLine($"public partial struct {s.Identifier} : IReflectable")
+                .OpenBlock()
+                .WriteLine("public T Get<T>(string propertyName)")
+                .OpenBlock();
+            bool first = true;
+            foreach(var (t,p) in propertiesWithGetters)
+            {
+                var condition = first ? "if" : "else if";
+                code.WriteLine($"{condition}(propertyName == \"{p}\" && {p} is T _tmp_{p})")
+                    .WriteLine($"    return _tmp_{p};");
+                first = false;
+            }
+
+            code
+                .WriteLine($"else throw new Exception($\"Cannot find property {{propertyName}} of type {{typeof(T)}}\");")
+                .CloseBlock();
+
+            code.WriteLine("public void Set<T>(string propertyName, T value)")
+                .OpenBlock();
+            first = true;
+            foreach (var (t, p) in propertiesWithGettersAndSetters)
+            {
+                var condition = first ? "if" : "else if";
+                code.WriteLine($"{condition}(propertyName == \"{p}\" && value is {t} _tmp_{p})")
+                    .WriteLine($"    {p} = _tmp_{p};");
+                first = false;
+            }
+            code
+                .WriteLine($"else throw new Exception($\"Cannot find property {{propertyName}} of type {{typeof(T)}}\");")
+                .CloseAllBlocks();
+
+            context.AddSource($"{s.Identifier}.g.cs",code.ToString());
+        }
+        foreach (var c in classesWithAttribute)
+        {
+            var nspace = c.SyntaxTree.GetRoot().DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>().First();
+            var usings = c.SyntaxTree.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
+            var code = new CodeWriter();
+
+            var propertiesWithGetters =
+                c.Members.OfType<PropertyDeclarationSyntax>()
+                .Where(x => x.AccessorList != null && x.AccessorList.GetText().ToString().Contains("get"))
+                .Where(x => x.GetText().ToString().Contains("public "))
+                .Select(x => (x.Type, x.Identifier));
+            var propertiesWithGettersAndSetters =
+                c.Members.OfType<PropertyDeclarationSyntax>()
+                .Where(x => x.AccessorList != null && x.AccessorList.GetText().ToString().Contains("get"))
+                .Where(x => x.AccessorList != null && x.AccessorList.GetText().ToString().Contains("set"))
+                .Where(x => x.GetText().ToString().Contains("public "))
+                .Select(x => (x.Type, x.Identifier));
+
+            foreach (var u in usings)
+                code.WriteLine($"using {u.Name};");
+
+            code.WriteLine("using SoftTouch.Reflection.Core;")
+                .WriteEmptyLines(2)
+                .WriteLine($"namespace {nspace.Name};")
+                .WriteEmptyLines(1);
+
+
+
+            code
+                .WriteLine($"public partial class {c.Identifier} : IReflectable")
+                .OpenBlock()
+                .WriteLine("public T Get<T>(string propertyName)")
+                .OpenBlock();
+            bool first = true;
+            if (propertiesWithGetters.Any())
+            {
+                foreach (var (t, p) in propertiesWithGetters)
+                {
+                    var condition = first ? "if" : "else if";
+                    code.WriteLine($"{condition}(propertyName == \"{p}\" && {p} is T _tmp_{p})")
+                        .WriteLine($"    return _tmp_{p};");
+                    first = false;
+                }
+
+                code
+                    .WriteLine($"else throw new Exception($\"Cannot find property {{propertyName}} of type {{typeof(T)}}\");")
+                    .CloseBlock();
+            }
+            else
+                code
+                    .WriteLine($"throw new Exception($\"Cannot find property {{propertyName}} of type {{typeof(T)}}\");")
+                    .CloseBlock();
+            code.WriteLine("public void Set<T>(string propertyName, T value)")
+                .OpenBlock();
+            first = true;
+            if (propertiesWithGettersAndSetters.Any())
+            {
+                foreach (var (t, p) in propertiesWithGettersAndSetters)
+                {
+                    var condition = first ? "if" : "else if";
+                    code.WriteLine($"{condition}(propertyName == \"{p}\" && value is {t} _tmp_{p})")
+                        .WriteLine($"    {p} = _tmp_{p};");
+                    first = false;
+                }
+                code
+                    .WriteLine($"else throw new Exception($\"Cannot find property {{propertyName}} of type {{typeof(T)}}\");")
+                    .CloseAllBlocks();
+            }
+            else
+                code
+                    .WriteLine($"throw new Exception($\"Cannot find property {{propertyName}} of type {{typeof(T)}}\");")
+                    .CloseAllBlocks();
+
+            context.AddSource($"{c.Identifier}.g.cs", code.ToString());
         }
     }
 }
