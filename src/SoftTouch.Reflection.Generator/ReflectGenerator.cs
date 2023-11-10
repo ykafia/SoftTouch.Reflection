@@ -39,7 +39,7 @@ public class ReflectGenerator : ISourceGenerator
             var usings = s.SyntaxTree.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
             var code = new CodeWriter();
 
-            var propertiesWithGetters = 
+            var propertiesWithGetters =
                 s.Members.OfType<PropertyDeclarationSyntax>()
                 .Where(x => x.AccessorList != null && x.AccessorList.GetText().ToString().Contains("get"))
                 .Where(x => x.GetText().ToString().Contains("public "))
@@ -63,11 +63,19 @@ public class ReflectGenerator : ISourceGenerator
 
             code
                 .WriteLine($"public partial struct {s.Identifier} : IReflectable")
-                .OpenBlock()
+                .OpenBlock();
+
+            code.WriteLine($"public static string[] Getters {{ get; }} = {{{string.Join(", ", propertiesWithGetters.Select(x => $"\"{x.Identifier}\""))}}};");
+            code.WriteLine($"public static string[] Setters {{ get; }} = {{{string.Join(", ", propertiesWithGettersAndSetters.Select(x => $"\"{x.Identifier}\""))}}};");
+
+            code.WriteLine("public static bool HasProperty(string name) => Getters.Contains(name) || Setters.Contains(name);");
+
+
+            code
                 .WriteLine("public T Get<T>(string propertyName)")
                 .OpenBlock();
             bool first = true;
-            foreach(var (t,p) in propertiesWithGetters)
+            foreach (var (t, p) in propertiesWithGetters)
             {
                 var condition = first ? "if" : "else if";
                 code.WriteLine($"{condition}(propertyName == \"{p}\" && {p} is T _tmp_{p})")
@@ -78,6 +86,7 @@ public class ReflectGenerator : ISourceGenerator
             code
                 .WriteLine($"else throw new Exception($\"Cannot find property {{propertyName}} of type {{typeof(T)}}\");")
                 .CloseBlock();
+
 
             code.WriteLine("public void Set<T>(string propertyName, T value)")
                 .OpenBlock();
@@ -93,7 +102,7 @@ public class ReflectGenerator : ISourceGenerator
                 .WriteLine($"else throw new Exception($\"Cannot find property {{propertyName}} of type {{typeof(T)}}\");")
                 .CloseAllBlocks();
 
-            context.AddSource($"{s.Identifier}.g.cs",code.ToString());
+            context.AddSource($"{s.Identifier}.g.cs", code.ToString());
         }
         foreach (var c in classesWithAttribute)
         {
@@ -125,7 +134,15 @@ public class ReflectGenerator : ISourceGenerator
 
             code
                 .WriteLine($"public partial class {c.Identifier} : IReflectable")
-                .OpenBlock()
+                .OpenBlock();
+
+            code.WriteLine($"public static string[] Getters {{ get; }} = {{{string.Join(", ", propertiesWithGetters.Select(x => $"\"{x.Identifier}\""))}}};");
+            code.WriteLine($"public static string[] Setters {{ get; }} = {{{string.Join(", ", propertiesWithGettersAndSetters.Select(x => $"\"{x.Identifier}\""))}}};");
+
+            code.WriteLine("public static bool HasProperty(string name) => Getters.Contains(name) || Setters.Contains(name);");
+
+
+            code
                 .WriteLine("public T Get<T>(string propertyName)")
                 .OpenBlock();
             bool first = true;
