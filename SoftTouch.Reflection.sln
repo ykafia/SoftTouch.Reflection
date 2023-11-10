@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7944D31A-3799-49DA-8891-DD8CD25FB061}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftTouch.Reflection", "src\SoftTouch.Reflection\SoftTouch.Reflection.csproj", "{1D4A88E6-DD4D-4F2C-ACC2-E621476BB77A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftTouch.Reflection.Core", "src\SoftTouch.Reflection.Core\SoftTouch.Reflection.Core.csproj", "{AD503072-1D95-49C4-8D3D-D852DD01E92D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftTouch.Reflection.Example", "src\SoftTouch.Reflection.Example\SoftTouch.Reflection.Example.csproj", "{E1EDEB74-C90B-4529-A24C-7EBD6CD2EFB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftTouch.Reflection.Generator", "src\SoftTouch.Reflection.Generator\SoftTouch.Reflection.Generator.csproj", "{18D186A2-3218-4509-A53E-D76FF2FBD838}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1D4A88E6-DD4D-4F2C-ACC2-E621476BB77A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D4A88E6-DD4D-4F2C-ACC2-E621476BB77A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D4A88E6-DD4D-4F2C-ACC2-E621476BB77A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D4A88E6-DD4D-4F2C-ACC2-E621476BB77A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD503072-1D95-49C4-8D3D-D852DD01E92D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD503072-1D95-49C4-8D3D-D852DD01E92D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD503072-1D95-49C4-8D3D-D852DD01E92D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD503072-1D95-49C4-8D3D-D852DD01E92D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1EDEB74-C90B-4529-A24C-7EBD6CD2EFB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1EDEB74-C90B-4529-A24C-7EBD6CD2EFB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1EDEB74-C90B-4529-A24C-7EBD6CD2EFB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1EDEB74-C90B-4529-A24C-7EBD6CD2EFB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18D186A2-3218-4509-A53E-D76FF2FBD838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18D186A2-3218-4509-A53E-D76FF2FBD838}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18D186A2-3218-4509-A53E-D76FF2FBD838}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18D186A2-3218-4509-A53E-D76FF2FBD838}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1D4A88E6-DD4D-4F2C-ACC2-E621476BB77A} = {7944D31A-3799-49DA-8891-DD8CD25FB061}
+		{AD503072-1D95-49C4-8D3D-D852DD01E92D} = {7944D31A-3799-49DA-8891-DD8CD25FB061}
+		{E1EDEB74-C90B-4529-A24C-7EBD6CD2EFB9} = {7944D31A-3799-49DA-8891-DD8CD25FB061}
+		{18D186A2-3218-4509-A53E-D76FF2FBD838} = {7944D31A-3799-49DA-8891-DD8CD25FB061}
+	EndGlobalSection
+EndGlobal
