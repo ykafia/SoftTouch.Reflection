@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <Nullable>enable</Nullable>
+    <PublishAot>true</PublishAot>
   </PropertyGroup>
 
   <ItemGroup>
